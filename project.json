@@ -1,0 +1,22 @@
+{
+  "overview": "A modern, fully responsive stitching service platform for tailoring and custom clothing. Customers can browse services, place custom orders, track delivery status, and checkout with Stripe. Admins manage orders, services, and customer data from a dedicated dashboard.",
+  "features": [
+    "Service catalog with price calculator and add-ons",
+    "Custom stitching order form with image upload",
+    "Real-time order tracking by order ID",
+    "Stripe checkout with cart management",
+    "Internet Identity authentication and user accounts",
+    "Admin dashboard with orders, services, and customer management"
+  ],
+  "category": "ecommerce",
+  "tags": [
+    "tailoring",
+    "fashion",
+    "stitching",
+    "custom-clothing",
+    "ecommerce",
+    "booking",
+    "order-tracking"
+  ],
+  "last_updated": "2026-04-17T21:06:27.886Z"
+}

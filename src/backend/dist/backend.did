@@ -1,0 +1,253 @@
+type UserRole = 
+ variant {
+   Admin;
+   Customer;
+   Staff;
+   Tailor;
+ };
+type UserId = principal;
+type User = 
+ record {
+   createdAt: Timestamp;
+   email: text;
+   id: UserId;
+   name: text;
+   phone: text;
+   role: UserRole;
+   savedMeasurements: opt Measurement;
+ };
+type UpdateServiceArgs = 
+ record {
+   addons: vec Addon;
+   category: ServiceCategory;
+   deliveryDays: nat;
+   description: text;
+   fabricOptions: vec text;
+   id: ServiceId;
+   imageUrl: text;
+   name: text;
+   priceMax: nat;
+   priceMin: nat;
+   slug: text;
+ };
+type UpdateProfileArgs = 
+ record {
+   email: text;
+   name: text;
+   phone: text;
+ };
+type Timestamp = int;
+type Tailor = 
+ record {
+   createdAt: Timestamp;
+   email: text;
+   id: UserId;
+   isActive: bool;
+   name: text;
+   ordersAssigned: vec OrderId;
+   phone: text;
+   specialization: vec text;
+ };
+type ServiceId = nat;
+type ServiceCategory = 
+ variant {
+   Custom;
+   Kids;
+   Men;
+   Women;
+ };
+type Service = 
+ record {
+   addons: vec Addon;
+   category: ServiceCategory;
+   deliveryDays: nat;
+   description: text;
+   fabricOptions: vec text;
+   id: ServiceId;
+   imageUrl: text;
+   name: text;
+   priceMax: nat;
+   priceMin: nat;
+   slug: text;
+ };
+type ReviewId = nat;
+type Review = 
+ record {
+   approved: bool;
+   comment: text;
+   createdAt: Timestamp;
+   id: ReviewId;
+   orderId: OrderId;
+   rating: nat;
+   userId: UserId;
+ };
+type OrderStatus = 
+ variant {
+   Delivered;
+   InProgress;
+   Ready;
+   Received;
+   Stitching;
+ };
+type OrderId = nat;
+type Order = 
+ record {
+   address: Address;
+   couponCode: opt text;
+   createdAt: Timestamp;
+   id: OrderId;
+   items: vec CartItem;
+   measurements: Measurement;
+   status: OrderStatus;
+   tailorId: opt UserId;
+   totalAmount: nat;
+   updatedAt: Timestamp;
+   userId: UserId;
+ };
+type Measurement = 
+ record {
+   bust: opt nat;
+   hips: opt nat;
+   length: opt nat;
+   notes: text;
+   shoulder: opt nat;
+   sleeve: opt nat;
+   waist: opt nat;
+ };
+type GalleryItemId = nat;
+type GalleryItem = 
+ record {
+   category: GalleryCategory;
+   createdAt: Timestamp;
+   id: GalleryItemId;
+   imageUrl: text;
+   title: text;
+ };
+type GalleryCategory = 
+ variant {
+   Custom;
+   Featured;
+   Kids;
+   Men;
+   Women;
+ };
+type CreateTailorArgs = 
+ record {
+   email: text;
+   name: text;
+   phone: text;
+   "principal": UserId;
+   specialization: vec text;
+ };
+type CreateServiceArgs = 
+ record {
+   addons: vec Addon;
+   category: ServiceCategory;
+   deliveryDays: nat;
+   description: text;
+   fabricOptions: vec text;
+   imageUrl: text;
+   name: text;
+   priceMax: nat;
+   priceMin: nat;
+   slug: text;
+ };
+type CreateReviewArgs = 
+ record {
+   comment: text;
+   orderId: OrderId;
+   rating: nat;
+ };
+type CreateOrderArgs = 
+ record {
+   address: Address;
+   couponCode: opt text;
+   items: vec CartItem;
+   measurements: Measurement;
+   totalAmount: nat;
+ };
+type CreateGalleryItemArgs = 
+ record {
+   category: GalleryCategory;
+   imageUrl: text;
+   title: text;
+ };
+type CreateCouponArgs = 
+ record {
+   code: text;
+   discountPercent: nat;
+ };
+type CouponId = nat;
+type Coupon = 
+ record {
+   code: text;
+   createdAt: Timestamp;
+   discountPercent: nat;
+   id: CouponId;
+   isActive: bool;
+ };
+type CartItem = 
+ record {
+   addons: vec text;
+   price: nat;
+   quantity: nat;
+   serviceId: ServiceId;
+   serviceName: text;
+ };
+type AdminStats = 
+ record {
+   customersCount: nat;
+   pendingOrders: nat;
+   totalOrders: nat;
+   totalRevenue: nat;
+ };
+type Address = 
+ record {
+   city: text;
+   country: text;
+   state: text;
+   street: text;
+   zipCode: text;
+ };
+type Addon = 
+ record {
+   id: nat;
+   name: text;
+   price: nat;
+ };
+service : {
+  addGalleryItem: (args: CreateGalleryItemArgs) -> (GalleryItem);
+  approveReview: (id: ReviewId) -> (opt Review);
+  assignTailor: (orderId: OrderId, tailorId: UserId) -> (opt Order);
+  createCoupon: (args: CreateCouponArgs) -> (Coupon);
+  createOrder: (args: CreateOrderArgs) -> (Order);
+  createReview: (args: CreateReviewArgs) -> (Review);
+  createService: (args: CreateServiceArgs) -> (Service);
+  createTailor: (args: CreateTailorArgs) -> (Tailor);
+  deleteCoupon: (id: CouponId) -> (bool);
+  deleteGalleryItem: (id: GalleryItemId) -> (bool);
+  deleteReview: (id: ReviewId) -> (bool);
+  deleteService: (id: ServiceId) -> (bool);
+  getAdminStats: () -> (AdminStats) query;
+  getMyProfile: () -> (User);
+  getOrder: (id: OrderId) -> (opt Order) query;
+  getService: (id: ServiceId) -> (opt Service) query;
+  getServiceBySlug: (slug: text) -> (opt Service) query;
+  getTailor: (id: UserId) -> (opt Tailor) query;
+  listAllReviews: () -> (vec Review) query;
+  listApprovedReviews: () -> (vec Review) query;
+  listCoupons: () -> (vec Coupon) query;
+  listGalleryItems: () -> (vec GalleryItem) query;
+  listMyOrders: () -> (vec Order) query;
+  listOrders: () -> (vec Order) query;
+  listServices: () -> (vec Service) query;
+  listTailors: () -> (vec Tailor) query;
+  listUsers: () -> (vec User) query;
+  saveMeasurements: (measurements: Measurement) -> (opt User);
+  toggleCoupon: (id: CouponId) -> (opt Coupon);
+  trackOrder: (id: OrderId) -> (opt OrderStatus) query;
+  updateOrderStatus: (id: OrderId, status: OrderStatus) -> (opt Order);
+  updateProfile: (args: UpdateProfileArgs) -> (opt User);
+  updateService: (args: UpdateServiceArgs) -> (opt Service);
+  validateCoupon: (code: text) -> (opt Coupon) query;
+}

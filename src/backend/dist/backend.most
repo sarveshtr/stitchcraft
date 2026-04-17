@@ -1,0 +1,160 @@
+// Version: 1.0.0
+type Addon__744769508 = {id : Nat; name : Text; price : Nat};
+type Address__175912953 =
+  {city : Text; country : Text; state : Text; street : Text; zipCode : Text};
+type CartItem__858515331 =
+  {
+    addons : [Text];
+    price : Nat;
+    quantity : Nat;
+    serviceId : ServiceId__271116140;
+    serviceName : Text
+  };
+type CouponId__915196364 = Nat;
+type Coupon__85795931 =
+  {
+    code : Text;
+    createdAt : Timestamp__301639476;
+    discountPercent : Nat;
+    id : CouponId__915196364;
+    isActive : Bool
+  };
+type GalleryCategory__41380691 = {#Custom; #Featured; #Kids; #Men; #Women};
+type GalleryItemId__927586015 = Nat;
+type GalleryItem__374600587 =
+  {
+    category : GalleryCategory__41380691;
+    createdAt : Timestamp__301639476;
+    id : GalleryItemId__927586015;
+    imageUrl : Text;
+    title : Text
+  };
+type Measurement__888397688 =
+  {
+    bust : ?Nat;
+    hips : ?Nat;
+    length : ?Nat;
+    notes : Text;
+    shoulder : ?Nat;
+    sleeve : ?Nat;
+    waist : ?Nat
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type OrderId__197865225 = Nat;
+type OrderStatus__272730104 =
+  {#Delivered; #InProgress; #Ready; #Received; #Stitching};
+type Order__141779993 =
+  {
+    address : Address__175912953;
+    couponCode : ?Text;
+    createdAt : Timestamp__301639476;
+    id : OrderId__197865225;
+    items : [CartItem__858515331];
+    measurements : Measurement__888397688;
+    status : OrderStatus__272730104;
+    tailorId : ?UserId__158757552;
+    totalAmount : Nat;
+    updatedAt : Timestamp__301639476;
+    userId : UserId__158757552
+  };
+type ReviewId__496285678 = Nat;
+type Review__453630842 =
+  {
+    approved : Bool;
+    comment : Text;
+    createdAt : Timestamp__301639476;
+    id : ReviewId__496285678;
+    orderId : OrderId__197865225;
+    rating : Nat;
+    userId : UserId__158757552
+  };
+type ServiceCategory__640576661 = {#Custom; #Kids; #Men; #Women};
+type ServiceId__271116140 = Nat;
+type Service__980514341 =
+  {
+    addons : [Addon__744769508];
+    category : ServiceCategory__640576661;
+    deliveryDays : Nat;
+    description : Text;
+    fabricOptions : [Text];
+    id : ServiceId__271116140;
+    imageUrl : Text;
+    name : Text;
+    priceMax : Nat;
+    priceMin : Nat;
+    slug : Text
+  };
+type Tailor__458392456 =
+  {
+    createdAt : Timestamp__301639476;
+    email : Text;
+    id : UserId__158757552;
+    isActive : Bool;
+    name : Text;
+    ordersAssigned : [OrderId__197865225];
+    phone : Text;
+    specialization : [Text]
+  };
+type Timestamp__301639476 = Int;
+type UserId__158757552 = Principal;
+type UserRole__41952412 = {#Admin; #Customer; #Staff; #Tailor};
+type User__98118558 =
+  {
+    createdAt : Timestamp__301639476;
+    email : Text;
+    id : UserId__158757552;
+    name : Text;
+    phone : Text;
+    role : UserRole__41952412;
+    savedMeasurements : ?Measurement__888397688
+  };
+actor {
+  stable coupons :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Coupon__85795931]];
+      var elementIndex : Nat__490723111
+    };
+  stable gallery :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?GalleryItem__374600587]];
+      var elementIndex : Nat__490723111
+    };
+  stable nextCouponId : [var Nat];
+  stable nextGalleryId : [var Nat];
+  stable nextOrderId : [var Nat];
+  stable nextReviewId : [var Nat];
+  stable nextServiceId : [var Nat];
+  stable orders :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Order__141779993]];
+      var elementIndex : Nat__490723111
+    };
+  stable reviews :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Review__453630842]];
+      var elementIndex : Nat__490723111
+    };
+  stable services :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Service__980514341]];
+      var elementIndex : Nat__490723111
+    };
+  stable tailors :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Tailor__458392456]];
+      var elementIndex : Nat__490723111
+    };
+  stable users :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?User__98118558]];
+      var elementIndex : Nat__490723111
+    }
+};
